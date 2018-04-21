@@ -94,7 +94,7 @@ namespace NoteBinder.ViewModels
 
                 var saveObject = new SaveObject() { Panes = Panes.ToList(), SelectedTab = SelectedTab };
                 XmlSerializer serialiser = new XmlSerializer(typeof(SaveObject));
-                using (StreamWriter writer = new StreamWriter(File.ReadAllText(saveFileDialog.FileName)))
+                using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName, false, Encoding.UTF8))
                 {
                     serialiser.Serialize(writer, saveObject);
                 }
@@ -103,7 +103,18 @@ namespace NoteBinder.ViewModels
 
         public void Open()
         {
-
+            OpenFileDialog openFileDialog = new OpenFileDialog() { DefaultExt = "nbf", AddExtension = true, Filter = "NoteBinder Files (*.nbf)|*.nbf" };
+            if (openFileDialog.ShowDialog() == true)
+            {
+                
+                XmlSerializer serialiser = new XmlSerializer(typeof(SaveObject));
+                using (StreamReader reader = new StreamReader(openFileDialog.FileName, Encoding.UTF8))
+                {
+                    var readObject = (SaveObject)serialiser.Deserialize(reader);
+                    Panes = new ObservableCollection<NotePane>(readObject.Panes);
+                    SelectedTab = readObject.SelectedTab;
+                }
+            }
         }
 
         public void AddTab()
