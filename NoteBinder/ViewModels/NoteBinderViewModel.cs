@@ -49,6 +49,8 @@ namespace NoteBinder.ViewModels
             SaveCommand = new DelegateCommand(Save);
             OpenCommand = new DelegateCommand(Open);
             NewCommand = new DelegateCommand(New);
+            AddTabCommand = new DelegateCommand(AddTab);
+            
 
         }
         #endregion
@@ -58,6 +60,7 @@ namespace NoteBinder.ViewModels
         public DelegateCommand SaveCommand { get; set; }
         public DelegateCommand OpenCommand { get; set; }
         public DelegateCommand NewCommand { get; set; }
+        public DelegateCommand AddTabCommand { get; set; }
 
         #endregion
 
@@ -85,6 +88,12 @@ namespace NoteBinder.ViewModels
         {
 
         }
+
+        public void AddTab()
+        {
+            Panes.Add(new NotePane() { Header = "Test Header3", Notes = "Lorem ipsum blah blah blah" });
+        }
+
         #endregion
     }
 }

@@ -6,6 +6,11 @@
              xmlns:local="clr-namespace:NoteBinder.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    
+    <UserControl.InputBindings>
+        <KeyBinding Gesture="CTRL+N" Command="{Binding AddTabCommand}" />
+    </UserControl.InputBindings>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -14,9 +19,14 @@
 
         <ToolBarTray ToolBarTray.IsLocked="True">
             <ToolBar>
-                <Button Command="{Binding NewCommand}" Content="New" />
-                <Button Command="{Binding OpenCommand}" Content="Open" />
-                <Button Command="{Binding SaveCommand}" Content="Save" />
+                <Menu >
+                    <MenuItem Header="File">
+                        <MenuItem Command="{Binding NewCommand}" Header="New" />
+                        <MenuItem Command="{Binding OpenCommand}" Header="Open" />
+                        <MenuItem Command="{Binding SaveCommand}" Header="Save" />
+                    </MenuItem>
+                </Menu>
+                <Button Command="{Binding AddTabCommand}" Content="Add Tab"  />
             </ToolBar>
             
         </ToolBarTray>
