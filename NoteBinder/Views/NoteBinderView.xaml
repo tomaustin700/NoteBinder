@@ -9,6 +9,10 @@
     
     <UserControl.InputBindings>
         <KeyBinding Gesture="CTRL+N" Command="{Binding AddTabCommand}" />
+        <KeyBinding Gesture="CTRL+S" Command="{Binding SaveCommand}" />
+        <KeyBinding Gesture="CTRL+O" Command="{Binding OpenCommand}" />
+        <KeyBinding Gesture="CTRL+ALT+Left" Command="{Binding PreviousTabCommand}" />
+        <KeyBinding Gesture="Ctrl+ALT+Right" Command="{Binding NextTabCommand}" />
     </UserControl.InputBindings>
     
     <Grid>

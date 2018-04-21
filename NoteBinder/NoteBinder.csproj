@@ -72,6 +72,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Classes\NotePane.cs" />
+    <Compile Include="Classes\SaveObject.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\NoteBinderViewModel.cs" />
     <Compile Include="Views\NoteBinderView.xaml.cs">

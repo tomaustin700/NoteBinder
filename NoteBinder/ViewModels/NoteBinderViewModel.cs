@@ -1,12 +1,15 @@
-﻿using NoteBinder.Classes;
+﻿using Microsoft.Win32;
+using NoteBinder.Classes;
 using Prism.Commands;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace NoteBinder.ViewModels
 {
@@ -50,7 +53,9 @@ namespace NoteBinder.ViewModels
             OpenCommand = new DelegateCommand(Open);
             NewCommand = new DelegateCommand(New);
             AddTabCommand = new DelegateCommand(AddTab);
-            
+            PreviousTabCommand = new DelegateCommand(PreviousTab, CanPreviousTab);
+            NextTabCommand = new DelegateCommand(NextTab, CanNextTab);
+
 
         }
         #endregion
@@ -61,6 +66,8 @@ namespace NoteBinder.ViewModels
         public DelegateCommand OpenCommand { get; set; }
         public DelegateCommand NewCommand { get; set; }
         public DelegateCommand AddTabCommand { get; set; }
+        public DelegateCommand PreviousTabCommand { get; set; }
+        public DelegateCommand NextTabCommand { get; set; }
 
         #endregion
 
@@ -70,7 +77,7 @@ namespace NoteBinder.ViewModels
         {
             Panes = new ObservableCollection<NotePane>();
             Panes.Add(new NotePane() { Header = "Test Header", Notes = "Lorem ipsum blah blah blah" });
-            Panes.Add(new NotePane() { Header = "Test Header2", Notes = "Lorem ipsum blah blah blah" });
+            Panes.Add(new NotePane() { Header = "Test Header2", Notes = "Lorem ipsum blah blah blah Lorem ipsum blah blah blah" });
 
         }
 
@@ -81,7 +88,17 @@ namespace NoteBinder.ViewModels
 
         public void Save()
         {
+            SaveFileDialog saveFileDialog = new SaveFileDialog() { DefaultExt = "nbf", AddExtension = true, Filter = "NoteBinder Files (*.nbf)|*.nbf" };
+            if (saveFileDialog.ShowDialog() == true)
+            {
 
+                var saveObject = new SaveObject() { Panes = Panes.ToList(), SelectedTab = SelectedTab };
+                XmlSerializer serialiser = new XmlSerializer(typeof(SaveObject));
+                using (StreamWriter writer = new StreamWriter(File.ReadAllText(saveFileDialog.FileName)))
+                {
+                    serialiser.Serialize(writer, saveObject);
+                }
+            }
         }
 
         public void Open()
@@ -92,6 +109,27 @@ namespace NoteBinder.ViewModels
         public void AddTab()
         {
             Panes.Add(new NotePane() { Header = "Test Header3", Notes = "Lorem ipsum blah blah blah" });
+        }
+
+        void PreviousTab()
+        {
+            SelectedTab = SelectedTab - 1;
+
+        }
+
+        bool CanPreviousTab()
+        {
+            return SelectedTab != 0;
+        }
+
+        void NextTab()
+        {
+            SelectedTab = SelectedTab + 1;
+        }
+
+        bool CanNextTab()
+        {
+            return Panes != null && SelectedTab != Panes.Count() - 1;
         }
 
         #endregion
