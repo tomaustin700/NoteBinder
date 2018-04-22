@@ -76,8 +76,7 @@ namespace NoteBinder.ViewModels
         public override void Loaded()
         {
             Panes = new ObservableCollection<NotePane>();
-            Panes.Add(new NotePane() { Header = "Test Header", Notes = "Lorem ipsum blah blah blah" });
-            Panes.Add(new NotePane() { Header = "Test Header2", Notes = "Lorem ipsum blah blah blah Lorem ipsum blah blah blah" });
+            Panes.Add(new NotePane() { Header = "Untitled", Notes = "" });
 
         }
 
@@ -106,7 +105,7 @@ namespace NoteBinder.ViewModels
             OpenFileDialog openFileDialog = new OpenFileDialog() { DefaultExt = "nbf", AddExtension = true, Filter = "NoteBinder Files (*.nbf)|*.nbf" };
             if (openFileDialog.ShowDialog() == true)
             {
-                
+
                 XmlSerializer serialiser = new XmlSerializer(typeof(SaveObject));
                 using (StreamReader reader = new StreamReader(openFileDialog.FileName, Encoding.UTF8))
                 {
@@ -119,7 +118,27 @@ namespace NoteBinder.ViewModels
 
         public void AddTab()
         {
-            Panes.Add(new NotePane() { Header = "Test Header3", Notes = "Lorem ipsum blah blah blah" });
+            Panes.Add(new NotePane() { Header = GetUniqueName("Untitled"), Notes = "" });
+            SelectedTab = SelectedTab + 1;
+        }
+
+        private string GetUniqueName(string name)
+        {
+            if (!Panes.Any(x => x.Header == name))
+                return name;
+            else
+            {
+                int unique = 1;
+                var tempName = name;
+                do
+                {
+                    tempName = name + unique;
+                    unique++;
+                }
+                while (Panes.Any(x => x.Header == tempName));
+
+                return tempName;
+            }
         }
 
         void PreviousTab()

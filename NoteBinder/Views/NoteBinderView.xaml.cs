@@ -26,5 +26,11 @@ namespace NoteBinder.Views
             InitializeComponent();
             DataContext = new NoteBinderViewModel();
         }
+
+        private void textBox_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ((TextBox)sender).Focus();
+        }
     }
+      
 }

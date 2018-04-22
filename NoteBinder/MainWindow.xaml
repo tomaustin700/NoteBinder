@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:NoteBinder"
         mc:Ignorable="d"
         xmlns:views="clr-namespace:NoteBinder.Views"
-        Title="NoteBinder" Height="350" Width="525">
+        Title="NoteBinder" Height="800" Width="1000">
     <Grid>
         <views:NoteBinderView />
     </Grid>
