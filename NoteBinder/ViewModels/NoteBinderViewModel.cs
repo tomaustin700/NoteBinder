@@ -55,6 +55,7 @@ namespace NoteBinder.ViewModels
             AddTabCommand = new DelegateCommand(AddTab);
             DeleteTabCommand = new DelegateCommand<NotePane>(DeleteTab, CanDeletePane);
             RenameCommand = new DelegateCommand<NotePane>(Rename, CanRename);
+            StopRenameCommand = new DelegateCommand<NotePane>(StopRename, CanStopRename);
             PreviousTabCommand = new DelegateCommand(PreviousTab, CanPreviousTab);
             NextTabCommand = new DelegateCommand(NextTab, CanNextTab);
 
@@ -69,6 +70,7 @@ namespace NoteBinder.ViewModels
         public DelegateCommand NewCommand { get; set; }
         public DelegateCommand AddTabCommand { get; set; }
         public DelegateCommand<NotePane> DeleteTabCommand { get; set; }
+        public DelegateCommand<NotePane> StopRenameCommand { get; set; }
         public DelegateCommand<NotePane> RenameCommand { get; set; }
         public DelegateCommand PreviousTabCommand { get; set; }
         public DelegateCommand NextTabCommand { get; set; }
@@ -143,6 +145,16 @@ namespace NoteBinder.ViewModels
         }
 
         public bool CanRename(NotePane pane)
+        {
+            return pane != null;
+        }
+
+        public void StopRename(NotePane pane)
+        {
+            pane.EditingHeader = false;
+        }
+
+        public bool CanStopRename(NotePane pane)
         {
             return pane != null;
         }
