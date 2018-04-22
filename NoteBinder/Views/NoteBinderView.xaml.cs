@@ -31,6 +31,12 @@ namespace NoteBinder.Views
         {
             ((TextBox)sender).Focus();
         }
+
+        private void TextBox_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            ((TextBox)sender).Focus();
+
+        }
     }
       
 }

@@ -205,7 +205,7 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
-                        <TextBox Text="{Binding Header}"   >
+                        <TextBox Text="{Binding Header}" IsVisibleChanged="TextBox_IsVisibleChanged"   >
                             
                             <TextBox.Style>
                                 <Style TargetType="{x:Type TextBox}">
