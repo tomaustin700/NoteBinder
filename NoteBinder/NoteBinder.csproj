@@ -71,6 +71,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\BaseNotify.cs" />
     <Compile Include="Classes\NotePane.cs" />
     <Compile Include="Classes\SaveObject.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />

@@ -21,7 +21,17 @@ namespace NoteBinder.ViewModels
 
         #endregion
 
-
+        
+        #region Properties
+        public ObservableCollection<NotePane> Panes
+        {
+            get { return _panes; }
+            set
+            {
+                _panes = value;
+                RaisePropertyChanged();
+            }
+        }
 
         public int SelectedTab
         {
@@ -34,16 +44,6 @@ namespace NoteBinder.ViewModels
         }
 
 
-        #region Properties
-        public ObservableCollection<NotePane> Panes
-        {
-            get { return _panes; }
-            set
-            {
-                _panes = value;
-                RaisePropertyChanged();
-            }
-        }
         #endregion
 
         #region Constructor
@@ -54,6 +54,7 @@ namespace NoteBinder.ViewModels
             NewCommand = new DelegateCommand(New);
             AddTabCommand = new DelegateCommand(AddTab);
             DeleteTabCommand = new DelegateCommand<NotePane>(DeleteTab, CanDeletePane);
+            RenameCommand = new DelegateCommand<NotePane>(Rename, CanRename);
             PreviousTabCommand = new DelegateCommand(PreviousTab, CanPreviousTab);
             NextTabCommand = new DelegateCommand(NextTab, CanNextTab);
 
@@ -68,8 +69,10 @@ namespace NoteBinder.ViewModels
         public DelegateCommand NewCommand { get; set; }
         public DelegateCommand AddTabCommand { get; set; }
         public DelegateCommand<NotePane> DeleteTabCommand { get; set; }
+        public DelegateCommand<NotePane> RenameCommand { get; set; }
         public DelegateCommand PreviousTabCommand { get; set; }
         public DelegateCommand NextTabCommand { get; set; }
+
 
         #endregion
 
@@ -132,6 +135,16 @@ namespace NoteBinder.ViewModels
         public bool CanDeletePane(NotePane pane)
         {
             return pane != null && Panes.Count() > 1;
+        }
+
+        public void Rename(NotePane pane)
+        {
+            pane.EditingHeader = true;
+        }
+
+        public bool CanRename(NotePane pane)
+        {
+            return pane != null;
         }
 
         private string GetUniqueName(string name)

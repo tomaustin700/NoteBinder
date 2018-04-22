@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              d:DesignHeight="300" d:DesignWidth="300">
-    
+
     <UserControl.InputBindings>
         <KeyBinding Gesture="CTRL+N" Command="{Binding AddTabCommand}" />
         <KeyBinding Gesture="CTRL+S" Command="{Binding SaveCommand}" />
@@ -15,7 +15,7 @@
         <KeyBinding Gesture="CTRL+ALT+Left" Command="{Binding PreviousTabCommand}" />
         <KeyBinding Gesture="Ctrl+ALT+Right" Command="{Binding NextTabCommand}" />
     </UserControl.InputBindings>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -30,11 +30,11 @@
                         <MenuItem Command="{Binding OpenCommand}" Header="Open" />
                         <MenuItem Command="{Binding SaveCommand}" Header="Save" />
                     </MenuItem>
-                    
+
                 </Menu>
                 <!--<Button Command="{Binding AddTabCommand}" Content="Add Tab"  />-->
             </ToolBar>
-            
+
         </ToolBarTray>
 
 
@@ -182,17 +182,41 @@
                     <Setter Property="ContextMenu">
                         <Setter.Value>
                             <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" >
-                                <MenuItem Header="Rename"  />
+                                <MenuItem Header="Rename" Command="{Binding Tag.RenameCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" CommandParameter="{Binding }"  />
                                 <MenuItem Header="Delete" Command="{Binding Tag.DeleteTabCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" CommandParameter="{Binding }" />
                             </ContextMenu>
-                            
+
                         </Setter.Value>
                     </Setter>
                 </Style>
             </TabControl.ItemContainerStyle>
             <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{Binding Header}" />
+                    <Grid>
+                        <TextBlock Text="{Binding Header}" >
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding EditingHeader}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBox Text="{Binding Header}"  >
+                            <TextBox.Style>
+                                <Style TargetType="{x:Type TextBox}">
+                                    <Setter Property="Visibility" Value="Collapsed" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding EditingHeader}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
+                    </Grid>
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
@@ -200,7 +224,7 @@
                     <Grid FocusManager.FocusedElement="{Binding ElementName=textBox}">
                         <TextBox x:Name="textBox" DataContextChanged="textBox_DataContextChanged"  TextWrapping="Wrap" AcceptsReturn="True" Text="{Binding Notes, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" FontFamily="Consolas" FontSize="14"  />
                     </Grid>
-                    
+
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
