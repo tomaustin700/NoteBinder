@@ -53,7 +53,7 @@ namespace NoteBinder.ViewModels
             OpenCommand = new DelegateCommand(Open);
             NewCommand = new DelegateCommand(New);
             AddTabCommand = new DelegateCommand(AddTab);
-            DeleteTabCommand = new DelegateCommand<NotePane>(DeleteTab);
+            DeleteTabCommand = new DelegateCommand<NotePane>(DeleteTab, CanDeletePane);
             PreviousTabCommand = new DelegateCommand(PreviousTab, CanPreviousTab);
             NextTabCommand = new DelegateCommand(NextTab, CanNextTab);
 
@@ -126,7 +126,12 @@ namespace NoteBinder.ViewModels
 
         public void DeleteTab(NotePane pane)
         {
+            Panes.Remove(pane);
+        }
 
+        public bool CanDeletePane(NotePane pane)
+        {
+            return pane != null && Panes.Count() > 1;
         }
 
         private string GetUniqueName(string name)
