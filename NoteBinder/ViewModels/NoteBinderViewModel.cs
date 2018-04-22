@@ -21,7 +21,7 @@ namespace NoteBinder.ViewModels
 
         #endregion
 
-        
+
         #region Properties
         public ObservableCollection<NotePane> Panes
         {
@@ -82,14 +82,14 @@ namespace NoteBinder.ViewModels
 
         public override void Loaded()
         {
-            Panes = new ObservableCollection<NotePane>();
-            Panes.Add(new NotePane() { Header = "Untitled", Notes = "" });
-
+            New();
         }
 
         public void New()
         {
-
+            Panes = new ObservableCollection<NotePane>();
+            Panes.Add(new NotePane() { Header = "Untitled", Notes = "" });
+            SelectedTab = 0;
         }
 
         public void Save()
