@@ -50,11 +50,12 @@ namespace NoteBinder.ViewModels
         public NoteBinderViewModel()
         {
             SaveCommand = new DelegateCommand(Save);
+            SaveAsCommand = new DelegateCommand(SaveAs);
             OpenCommand = new DelegateCommand(Open);
             NewCommand = new DelegateCommand(New);
             AddTabCommand = new DelegateCommand(AddTab);
             DeleteTabCommand = new DelegateCommand<NotePane>(DeleteTab, CanDeletePane);
-            RenameCommand = new DelegateCommand<NotePane>(Rename, CanRename);
+            RenameCommand = new DelegateCommand<NotePane>(Rename);
             StopRenameCommand = new DelegateCommand<NotePane>(StopRename, CanStopRename);
             PreviousTabCommand = new DelegateCommand(PreviousTab, CanPreviousTab);
             NextTabCommand = new DelegateCommand(NextTab, CanNextTab);
@@ -66,6 +67,7 @@ namespace NoteBinder.ViewModels
         #region Commands
 
         public DelegateCommand SaveCommand { get; set; }
+        public DelegateCommand SaveAsCommand { get; set; }
         public DelegateCommand OpenCommand { get; set; }
         public DelegateCommand NewCommand { get; set; }
         public DelegateCommand AddTabCommand { get; set; }
@@ -91,7 +93,10 @@ namespace NoteBinder.ViewModels
             Panes.Add(new NotePane() { Header = "Untitled", Notes = "" });
             SelectedTab = 0;
         }
+        public void SaveAs()
+        {
 
+        }
         public void Save()
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog() { DefaultExt = "nbf", AddExtension = true, Filter = "NoteBinder Files (*.nbf)|*.nbf" };
@@ -105,6 +110,11 @@ namespace NoteBinder.ViewModels
                     serialiser.Serialize(writer, saveObject);
                 }
             }
+        }
+
+        public void CloseTab()
+        {
+
         }
 
         public void Open()
@@ -136,18 +146,14 @@ namespace NoteBinder.ViewModels
 
         public bool CanDeletePane(NotePane pane)
         {
-            return pane != null && Panes.Count() > 1;
+            return  Panes.Count() > 1;
         }
 
         public void Rename(NotePane pane)
         {
             pane.EditingHeader = true;
         }
-
-        public bool CanRename(NotePane pane)
-        {
-            return pane != null;
-        }
+        
 
         public void StopRename(NotePane pane)
         {

@@ -17,6 +17,15 @@
         <KeyBinding Gesture="Ctrl+ALT+Right" Command="{Binding NextTabCommand}" />
     </UserControl.InputBindings>
 
+    <UserControl.Resources>
+        <ControlTemplate x:Key="closeTabButtonStyle" TargetType="Button">
+            <Grid>
+                <Path Data="M0,0 L8,8 M8,0 L0,8" Margin="5,5,0,0" StrokeThickness="2" Stroke="LightGray" />
+                
+            </Grid>
+        </ControlTemplate>
+    </UserControl.Resources>
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -194,7 +203,11 @@
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <Grid>
-                        <TextBlock Text="{Binding Header}" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Header}" VerticalAlignment="Center" >
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>
@@ -224,6 +237,17 @@
                                 
                             </i:Interaction.Triggers>
                         </TextBox>
+                        <Button Margin="5,0,0,0" Template="{StaticResource closeTabButtonStyle}" Content="Close"  Command="{Binding DataContext.DeleteTabCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" CommandParameter="{Binding }" Grid.Column="1" >
+                            <Button.Style>
+                                <Style TargetType="{x:Type Button}" >
+                                    <Style.Triggers>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
                     </Grid>
                 </DataTemplate>
             </TabControl.ItemTemplate>
