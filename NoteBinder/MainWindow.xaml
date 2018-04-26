@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:NoteBinder"
         mc:Ignorable="d"
         xmlns:views="clr-namespace:NoteBinder.Views"
-        Title="NoteBinder" Height="800" Width="1000">
+        Title="{Binding DataContext.Title, ElementName=view,StringFormat={}{0} - NoteBinder}" Height="800" Width="1000">
     <Grid>
-        <views:NoteBinderView />
+        <views:NoteBinderView  x:Name="view" />
     </Grid>
 </Window>

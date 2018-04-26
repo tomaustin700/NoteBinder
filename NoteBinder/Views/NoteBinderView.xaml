@@ -188,7 +188,7 @@
                         <Setter.Value>
                             <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" >
                                 <MenuItem Header="Rename" Command="{Binding Tag.RenameCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" CommandParameter="{Binding }"  />
-                                <MenuItem Header="Delete" Command="{Binding Tag.DeleteTabCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" CommandParameter="{Binding }" />
+                                <MenuItem Header="Close" Command="{Binding Tag.CloseTabCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" CommandParameter="{Binding }" />
                             </ContextMenu>
 
                         </Setter.Value>
@@ -232,7 +232,7 @@
 
                             </i:Interaction.Triggers>
                         </TextBox>
-                        <customcontrols:CrossButton Margin="5,1,0,0" Width="12" Height="12"   Content="Close"  Command="{Binding DataContext.DeleteTabCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" CommandParameter="{Binding }" Grid.Column="1" >
+                        <customcontrols:CrossButton Margin="5,2,0,0" Width="12" Height="12"   Content="Close"  Command="{Binding DataContext.CloseTabCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" CommandParameter="{Binding }" Grid.Column="1" >
                             <customcontrols:CrossButton.Style>
                                 <Style TargetType="{x:Type customcontrols:CrossButton}" BasedOn="{StaticResource {x:Type customcontrols:CrossButton}}">
                                     <Style.Triggers>

@@ -33,6 +33,17 @@ namespace NoteBinder.ViewModels
             }
         }
 
+        private string _title = "Untitled";
+
+        public string Title
+        {
+            get { return _title; }
+            set { _title = value;
+                RaisePropertyChanged();
+            }
+        }
+
+
         public int SelectedTab
         {
             get { return _selectedTab; }
@@ -54,7 +65,7 @@ namespace NoteBinder.ViewModels
             OpenCommand = new DelegateCommand(Open);
             NewCommand = new DelegateCommand(New);
             AddTabCommand = new DelegateCommand(AddTab);
-            DeleteTabCommand = new DelegateCommand<NotePane>(DeleteTab, CanDeletePane);
+            CloseTabCommand = new DelegateCommand<NotePane>(CloseTab, CanClosePane);
             RenameCommand = new DelegateCommand<NotePane>(Rename);
             StopRenameCommand = new DelegateCommand<NotePane>(StopRename, CanStopRename);
             PreviousTabCommand = new DelegateCommand(PreviousTab, CanPreviousTab);
@@ -71,7 +82,7 @@ namespace NoteBinder.ViewModels
         public DelegateCommand OpenCommand { get; set; }
         public DelegateCommand NewCommand { get; set; }
         public DelegateCommand AddTabCommand { get; set; }
-        public DelegateCommand<NotePane> DeleteTabCommand { get; set; }
+        public DelegateCommand<NotePane> CloseTabCommand { get; set; }
         public DelegateCommand<NotePane> StopRenameCommand { get; set; }
         public DelegateCommand<NotePane> RenameCommand { get; set; }
         public DelegateCommand PreviousTabCommand { get; set; }
@@ -105,6 +116,7 @@ namespace NoteBinder.ViewModels
                     serialiser.Serialize(writer, saveObject);
                 }
                 _savePath = saveFileDialog.FileName;
+                Title = saveFileDialog.FileName.Split('\\').Last().Split('.').First();
             }
         }
         public void Save()
@@ -145,12 +157,12 @@ namespace NoteBinder.ViewModels
             SelectedTab = SelectedTab + 1;
         }
 
-        public void DeleteTab(NotePane pane)
+        public void CloseTab(NotePane pane)
         {
             Panes.Remove(pane);
         }
 
-        public bool CanDeletePane(NotePane pane)
+        public bool CanClosePane(NotePane pane)
         {
             return Panes.Count() > 1;
         }
