@@ -43,7 +43,10 @@
         </ToolBarTray>
 
 
-        <TabControl ItemsSource="{Binding Panes}" Grid.Row="1"   SelectedIndex="{Binding SelectedTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  >
+        <TabControl x:Name="tabControl" ItemsSource="{Binding Panes}" Grid.Row="1"   SelectedIndex="{Binding SelectedTab, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  >
+            <TabControl.InputBindings>
+                <KeyBinding Gesture="CTRL+Q" Command="{Binding CloseTabCommand}" CommandParameter="{Binding SelectedItem, ElementName=tabControl}"  />
+            </TabControl.InputBindings>
             <Control.Template>
                 <ControlTemplate TargetType="{x:Type TabControl}">
                     <Grid ClipToBounds="true"
