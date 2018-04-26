@@ -7,7 +7,8 @@
              mc:Ignorable="d" 
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="300" d:DesignWidth="300"
+             xmlns:customcontrols="clr-namespace:NoteBinder.CustomControls" >
 
     <UserControl.InputBindings>
         <KeyBinding Gesture="CTRL+N" Command="{Binding AddTabCommand}" />
@@ -17,14 +18,7 @@
         <KeyBinding Gesture="Ctrl+ALT+Right" Command="{Binding NextTabCommand}" />
     </UserControl.InputBindings>
 
-    <UserControl.Resources>
-        <ControlTemplate x:Key="closeTabButtonStyle" TargetType="Button">
-            <Grid>
-                <Path Data="M0,0 L8,8 M8,0 L0,8" Margin="5,5,0,0" StrokeThickness="2" Stroke="LightGray" />
-                
-            </Grid>
-        </ControlTemplate>
-    </UserControl.Resources>
+    
 
     <Grid>
         <Grid.RowDefinitions>
@@ -39,6 +33,7 @@
                         <MenuItem Command="{Binding NewCommand}" Header="New" />
                         <MenuItem Command="{Binding OpenCommand}" Header="Open" />
                         <MenuItem Command="{Binding SaveCommand}" Header="Save" />
+                        <MenuItem Command="{Binding SaveAsCommand}" Header="Save As" />
                     </MenuItem>
 
                 </Menu>
@@ -207,7 +202,7 @@
                             <ColumnDefinition />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Header}" VerticalAlignment="Center" >
+                        <TextBlock Text="{Binding Header}" MaxWidth="100" TextTrimming="CharacterEllipsis" ToolTip="{Binding Header}" VerticalAlignment="Center" >
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Style.Triggers>
@@ -218,8 +213,8 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
-                        <TextBox Text="{Binding Header}" IsVisibleChanged="TextBox_IsVisibleChanged"   >
-                            
+                        <TextBox Text="{Binding Header}" MaxWidth="100" IsVisibleChanged="TextBox_IsVisibleChanged"   >
+
                             <TextBox.Style>
                                 <Style TargetType="{x:Type TextBox}">
                                     <Setter Property="Visibility" Value="Collapsed" />
@@ -234,20 +229,20 @@
                                 <i:EventTrigger EventName="LostFocus">
                                     <i:InvokeCommandAction  Command="{Binding DataContext.StopRenameCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" CommandParameter="{Binding }"/>
                                 </i:EventTrigger>
-                                
+
                             </i:Interaction.Triggers>
                         </TextBox>
-                        <Button Margin="5,0,0,0" Template="{StaticResource closeTabButtonStyle}" Content="Close"  Command="{Binding DataContext.DeleteTabCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" CommandParameter="{Binding }" Grid.Column="1" >
-                            <Button.Style>
-                                <Style TargetType="{x:Type Button}" >
+                        <customcontrols:CrossButton Margin="5,1,0,0" Width="12" Height="12"   Content="Close"  Command="{Binding DataContext.DeleteTabCommand, RelativeSource={RelativeSource AncestorType={x:Type TabControl}}}" CommandParameter="{Binding }" Grid.Column="1" >
+                            <customcontrols:CrossButton.Style>
+                                <Style TargetType="{x:Type customcontrols:CrossButton}" BasedOn="{StaticResource {x:Type customcontrols:CrossButton}}">
                                     <Style.Triggers>
                                         <Trigger Property="IsEnabled" Value="False">
                                             <Setter Property="Visibility" Value="Collapsed" />
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
-                            </Button.Style>
-                        </Button>
+                            </customcontrols:CrossButton.Style>
+                        </customcontrols:CrossButton>
                     </Grid>
                 </DataTemplate>
             </TabControl.ItemTemplate>

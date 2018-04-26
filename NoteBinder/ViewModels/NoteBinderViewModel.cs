@@ -18,9 +18,9 @@ namespace NoteBinder.ViewModels
         #region Fields
         private ObservableCollection<NotePane> _panes;
         private int _selectedTab;
+        private string _savePath;
 
         #endregion
-
 
         #region Properties
         public ObservableCollection<NotePane> Panes
@@ -95,25 +95,31 @@ namespace NoteBinder.ViewModels
         }
         public void SaveAs()
         {
-
-        }
-        public void Save()
-        {
             SaveFileDialog saveFileDialog = new SaveFileDialog() { DefaultExt = "nbf", AddExtension = true, Filter = "NoteBinder Files (*.nbf)|*.nbf" };
             if (saveFileDialog.ShowDialog() == true)
             {
-
                 var saveObject = new SaveObject() { Panes = Panes.ToList(), SelectedTab = SelectedTab };
                 XmlSerializer serialiser = new XmlSerializer(typeof(SaveObject));
                 using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName, false, Encoding.UTF8))
                 {
                     serialiser.Serialize(writer, saveObject);
                 }
+                _savePath = saveFileDialog.FileName;
             }
         }
-
-        public void CloseTab()
+        public void Save()
         {
+            if (string.IsNullOrEmpty(_savePath))
+                SaveAs();
+            else
+            {
+                var saveObject = new SaveObject() { Panes = Panes.ToList(), SelectedTab = SelectedTab };
+                XmlSerializer serialiser = new XmlSerializer(typeof(SaveObject));
+                using (StreamWriter writer = new StreamWriter(_savePath, false, Encoding.UTF8))
+                {
+                    serialiser.Serialize(writer, saveObject);
+                }
+            }
 
         }
 
@@ -146,14 +152,14 @@ namespace NoteBinder.ViewModels
 
         public bool CanDeletePane(NotePane pane)
         {
-            return  Panes.Count() > 1;
+            return Panes.Count() > 1;
         }
 
         public void Rename(NotePane pane)
         {
             pane.EditingHeader = true;
         }
-        
+
 
         public void StopRename(NotePane pane)
         {

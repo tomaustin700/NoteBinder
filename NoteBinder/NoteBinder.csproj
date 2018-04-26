@@ -74,6 +74,7 @@
     <Compile Include="Classes\BaseNotify.cs" />
     <Compile Include="Classes\NotePane.cs" />
     <Compile Include="Classes\SaveObject.cs" />
+    <Compile Include="CustomControls\CrossButton.cs" />
     <Compile Include="ViewModels\BaseViewModel.cs" />
     <Compile Include="ViewModels\NoteBinderViewModel.cs" />
     <Compile Include="Views\NoteBinderView.xaml.cs">
@@ -91,6 +92,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Themes\CustomControlDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\NoteBinderView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
