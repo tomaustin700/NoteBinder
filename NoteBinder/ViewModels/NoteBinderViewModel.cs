@@ -82,6 +82,7 @@ namespace NoteBinder.ViewModels
             StopRenameCommand = new DelegateCommand<NotePane>(StopRename, CanStopRename);
             PreviousTabCommand = new DelegateCommand(PreviousTab, CanPreviousTab);
             NextTabCommand = new DelegateCommand(NextTab, CanNextTab);
+            ClosingCommand = new DelegateCommand(Closing, CanClosing);
 
 
         }
@@ -99,6 +100,9 @@ namespace NoteBinder.ViewModels
         public DelegateCommand<NotePane> RenameCommand { get; set; }
         public DelegateCommand PreviousTabCommand { get; set; }
         public DelegateCommand NextTabCommand { get; set; }
+        public DelegateCommand ClosedCommand { get; set; }
+        public DelegateCommand ClosingCommand { get; set; }
+        public DelegateCommand CancelClosingCommand { get; set; }
 
 
         #endregion
@@ -110,6 +114,33 @@ namespace NoteBinder.ViewModels
             New();
         }
 
+        void Closing()
+        {
+
+        }
+
+        private bool CanClosing()
+        {
+            if (HasPendingChanges)
+            {
+                switch (GenerateMessageBox())
+                {
+                    case MessageBoxResult.Yes:
+                        if (CommenceSave())
+                        {
+                            return true;
+                        }
+                        return false;
+
+                    case MessageBoxResult.No:
+                        return true;
+                    case MessageBoxResult.Cancel:
+                        return false;
+                }
+            }
+
+            return true;
+        }
         public void New()
         {
             if (HasPendingChanges)
@@ -119,19 +150,23 @@ namespace NoteBinder.ViewModels
             else
             {
                 Panes = new ObservableCollection<NotePane>();
-                Panes.Add(new NotePane() { Header = "Untitled",  });
+                Panes.Add(new NotePane() { Header = "Untitled", });
                 SelectedTab = 0;
             }
         }
 
-        void SaveChangesPrompt()
+        public MessageBoxResult GenerateMessageBox()
         {
             string messageBoxText = "You have unsaved changes, save?";
             string caption = "NoteBinder";
             MessageBoxButton button = MessageBoxButton.YesNoCancel;
             MessageBoxImage icon = MessageBoxImage.Warning;
-            MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
-            switch (result)
+            return MessageBox.Show(messageBoxText, caption, button, icon);
+        }
+
+        void SaveChangesPrompt()
+        {
+            switch (GenerateMessageBox())
             {
                 case MessageBoxResult.Yes:
                     if (CommenceSave())
@@ -191,7 +226,7 @@ namespace NoteBinder.ViewModels
                 {
                     serialiser.Serialize(writer, saveObject);
                 }
-                ResetPendingChanges() ;
+                ResetPendingChanges();
 
                 return true;
             }

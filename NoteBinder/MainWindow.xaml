@@ -6,6 +6,10 @@
         xmlns:local="clr-namespace:NoteBinder"
         mc:Ignorable="d"
         xmlns:views="clr-namespace:NoteBinder.Views"
+        xmlns:attachedProperties="clr-namespace:NoteBinder.AttachedProperties"
+        attachedProperties:WindowClosingBehavior.Closed="{Binding DataContext.ClosedCommand, ElementName=view}"
+        attachedProperties:WindowClosingBehavior.Closing="{Binding DataContext.ClosingCommand, ElementName=view}"
+        attachedProperties:WindowClosingBehavior.CancelClosing="{Binding DataContext.CancelClosingCommand, ElementName=view}"
         Title="{Binding DataContext.Title, ElementName=view,StringFormat={}{0} - NoteBinder}" Height="800" Width="1000">
     <Grid>
         <views:NoteBinderView  x:Name="view" />
