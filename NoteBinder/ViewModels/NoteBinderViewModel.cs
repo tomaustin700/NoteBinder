@@ -9,6 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml.Serialization;
 
 namespace NoteBinder.ViewModels
@@ -19,6 +20,7 @@ namespace NoteBinder.ViewModels
         private ObservableCollection<NotePane> _panes;
         private int _selectedTab;
         private string _savePath;
+        private bool _hasPendingChanges;
 
         #endregion
 
@@ -38,7 +40,9 @@ namespace NoteBinder.ViewModels
         public string Title
         {
             get { return _title; }
-            set { _title = value;
+            set
+            {
+                _title = value;
                 RaisePropertyChanged();
             }
         }
@@ -53,6 +57,14 @@ namespace NoteBinder.ViewModels
                 RaisePropertyChanged();
             }
         }
+
+
+        public bool HasPendingChanges
+        {
+            get { return Panes != null && Panes.Any(x => x.HasPendingChanges); }
+
+        }
+
 
 
         #endregion
@@ -100,15 +112,59 @@ namespace NoteBinder.ViewModels
 
         public void New()
         {
-            Panes = new ObservableCollection<NotePane>();
-            Panes.Add(new NotePane() { Header = "Untitled", Notes = "" });
-            SelectedTab = 0;
+            if (HasPendingChanges)
+            {
+                SaveChangesPrompt();
+            }
+            else
+            {
+                Panes = new ObservableCollection<NotePane>();
+                Panes.Add(new NotePane() { Header = "Untitled",  });
+                SelectedTab = 0;
+            }
         }
+
+        void SaveChangesPrompt()
+        {
+            string messageBoxText = "You have unsaved changes, save?";
+            string caption = "NoteBinder";
+            MessageBoxButton button = MessageBoxButton.YesNoCancel;
+            MessageBoxImage icon = MessageBoxImage.Warning;
+            MessageBoxResult result = MessageBox.Show(messageBoxText, caption, button, icon);
+            switch (result)
+            {
+                case MessageBoxResult.Yes:
+                    if (CommenceSave())
+                    {
+                        ResetPendingChanges();
+                        New();
+                    }
+                    break;
+                case MessageBoxResult.No:
+                    ResetPendingChanges();
+                    New();
+                    break;
+                case MessageBoxResult.Cancel:
+                    break;
+            }
+        }
+
         public void SaveAs()
         {
+            CommenceSaveAs();
+        }
+        public void Save()
+        {
+            CommenceSave();
+        }
+
+        public bool CommenceSaveAs()
+        {
             SaveFileDialog saveFileDialog = new SaveFileDialog() { DefaultExt = "nbf", AddExtension = true, Filter = "NoteBinder Files (*.nbf)|*.nbf" };
+            bool dialogShown = false;
             if (saveFileDialog.ShowDialog() == true)
             {
+                dialogShown = true;
                 var saveObject = new SaveObject() { Panes = Panes.ToList(), SelectedTab = SelectedTab };
                 XmlSerializer serialiser = new XmlSerializer(typeof(SaveObject));
                 using (StreamWriter writer = new StreamWriter(saveFileDialog.FileName, false, Encoding.UTF8))
@@ -117,12 +173,16 @@ namespace NoteBinder.ViewModels
                 }
                 _savePath = saveFileDialog.FileName;
                 Title = saveFileDialog.FileName.Split('\\').Last().Split('.').First();
+                ResetPendingChanges();
             }
+
+            return dialogShown;
         }
-        public void Save()
+
+        public bool CommenceSave()
         {
             if (string.IsNullOrEmpty(_savePath))
-                SaveAs();
+                return CommenceSaveAs();
             else
             {
                 var saveObject = new SaveObject() { Panes = Panes.ToList(), SelectedTab = SelectedTab };
@@ -131,7 +191,15 @@ namespace NoteBinder.ViewModels
                 {
                     serialiser.Serialize(writer, saveObject);
                 }
+                ResetPendingChanges() ;
+
+                return true;
             }
+        }
+
+        public void ResetPendingChanges()
+        {
+            Panes.ToList().ForEach(x => x.HasPendingChanges = false);
 
         }
 

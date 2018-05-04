@@ -32,6 +32,7 @@ namespace NoteBinder.Classes
             {
                 _notes = value;
                 RaisePropertyChanged();
+                HasPendingChanges = true;
             }
         }
 
@@ -46,6 +47,17 @@ namespace NoteBinder.Classes
                 RaisePropertyChanged();
             }
         }
+
+        private bool _hasPendingChanges;
+
+        public bool HasPendingChanges
+        {
+            get { return _hasPendingChanges; }
+            set { _hasPendingChanges = value;
+                RaisePropertyChanged();
+            }
+        }
+
 
 
     }
