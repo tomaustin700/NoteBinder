@@ -148,13 +148,15 @@ namespace NoteBinder.ViewModels
                     Panes = new ObservableCollection<NotePane>(readObject.Panes);
                     SelectedTab = readObject.SelectedTab;
                 }
+                Title = openFileDialog.FileName.Split('\\').Last().Split('.').First();
+
             }
         }
 
         public void AddTab()
         {
             Panes.Add(new NotePane() { Header = GetUniqueName("Untitled"), Notes = "" });
-            SelectedTab = SelectedTab + 1;
+            SelectedTab = Panes.IndexOf(Panes.Last());
         }
 
         public void CloseTab(NotePane pane)
