@@ -20,7 +20,6 @@ namespace NoteBinder.ViewModels
         private ObservableCollection<NotePane> _panes;
         private int _selectedTab;
         private string _savePath;
-        private bool _hasPendingChanges;
 
         #endregion
 
