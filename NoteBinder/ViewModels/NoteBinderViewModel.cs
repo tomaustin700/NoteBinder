@@ -77,12 +77,13 @@ namespace NoteBinder.ViewModels
             NewCommand = new DelegateCommand(New);
             AddTabCommand = new DelegateCommand(AddTab);
             CloseTabCommand = new DelegateCommand<NotePane>(CloseTab, CanClosePane);
+            CloseAllButThisCommand = new DelegateCommand<NotePane>(CloseAllButThis, CanClosePane);
             RenameCommand = new DelegateCommand<NotePane>(Rename);
             StopRenameCommand = new DelegateCommand<NotePane>(StopRename, CanStopRename);
             PreviousTabCommand = new DelegateCommand(PreviousTab, CanPreviousTab);
             NextTabCommand = new DelegateCommand(NextTab, CanNextTab);
             ClosingCommand = new DelegateCommand(Closing, CanClosing);
-
+            CloseApplicationCommand = new DelegateCommand(CloseApplication);
 
         }
         #endregion
@@ -102,6 +103,8 @@ namespace NoteBinder.ViewModels
         public DelegateCommand ClosedCommand { get; set; }
         public DelegateCommand ClosingCommand { get; set; }
         public DelegateCommand CancelClosingCommand { get; set; }
+        public DelegateCommand CloseApplicationCommand { get; set; }
+        public DelegateCommand<NotePane> CloseAllButThisCommand { get; set; }
 
 
         #endregion
@@ -116,6 +119,11 @@ namespace NoteBinder.ViewModels
         void Closing()
         {
 
+        }
+
+        void CloseApplication()
+        {
+            Application.Current.Shutdown();
         }
 
         private bool CanClosing()
@@ -264,6 +272,14 @@ namespace NoteBinder.ViewModels
         public void CloseTab(NotePane pane)
         {
             Panes.Remove(pane);
+        }
+
+        public void CloseAllButThis(NotePane pane)
+        {
+            foreach (var paneToRemove in Panes.Where(x => x != pane).ToList())
+            {
+                Panes.Remove(paneToRemove);
+            }
         }
 
         public bool CanClosePane(NotePane pane)

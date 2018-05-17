@@ -34,6 +34,7 @@
                         <MenuItem Command="{Binding OpenCommand}" Header="Open" />
                         <MenuItem Command="{Binding SaveCommand}" Header="Save" />
                         <MenuItem Command="{Binding SaveAsCommand}" Header="Save As" />
+                        <MenuItem Command="{Binding CloseApplicationCommand}" Header="Close" />
                     </MenuItem>
 
                 </Menu>
@@ -192,6 +193,7 @@
                             <ContextMenu Tag="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}" >
                                 <MenuItem Header="Rename" Command="{Binding Tag.RenameCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" CommandParameter="{Binding }"  />
                                 <MenuItem Header="Close" Command="{Binding Tag.CloseTabCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" CommandParameter="{Binding }" />
+                                <MenuItem Header="Close All But This" Command="{Binding Tag.CloseAllButThisCommand, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" CommandParameter="{Binding }" />
                             </ContextMenu>
 
                         </Setter.Value>
