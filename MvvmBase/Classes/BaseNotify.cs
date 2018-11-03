@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NoteBinder.Classes
+namespace MvvmBase.Classes
 {
     public class BaseNotify : INotifyPropertyChanged
     {
